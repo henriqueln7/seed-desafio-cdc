@@ -8,13 +8,13 @@ import javax.validation.constraints.Size;
 
 public class CreateAuthorRequest {
     @NotBlank
-    private String name;
+    public final String name;
     @NotBlank
     @Size(max = 400)
-    private String description;
+    public final String description;
     @NotBlank
     @Email
-    private String email;
+    public final String email;
 
     public CreateAuthorRequest(@NotBlank String name, @NotBlank @Size(max = 400) String description, @NotBlank @Email String email) {
         this.name = name;
