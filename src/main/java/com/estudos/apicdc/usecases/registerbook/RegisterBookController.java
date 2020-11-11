@@ -2,10 +2,8 @@ package com.estudos.apicdc.usecases.registerbook;
 
 import com.estudos.apicdc.domain.Book;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +15,16 @@ public class RegisterBookController {
 
     @PersistenceContext
     private EntityManager manager;
+    private NewBookRequestValidator newBookRequestValidator;
+
+    public RegisterBookController(NewBookRequestValidator newBookRequestValidator) {
+        this.newBookRequestValidator = newBookRequestValidator;
+    }
+
+    @InitBinder
+    public void init(WebDataBinder binder) {
+        binder.addValidators(newBookRequestValidator);
+    }
 
     @PostMapping("/books")
     @ResponseStatus(HttpStatus.CREATED)

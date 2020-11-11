@@ -12,7 +12,6 @@ import java.time.LocalDate;
 
 public class NewBookRequest {
     @NotBlank
-    // Eh unico
     private String title;
     @Size(max = 500)
     @NotBlank
@@ -25,8 +24,6 @@ public class NewBookRequest {
     @Min(100)
     private int numberPages;
     @NotBlank
-    //Eh unico
-//    @ISBN
     private String isbn;
     @NotNull
     @Future
@@ -56,5 +53,13 @@ public class NewBookRequest {
         Assert.notNull(author, "You should pass a valid authorId");
 
         return new Book(this.title, this.resume, this.summaryMarkdown, this.price, this.numberPages, this.isbn, this.launchDate, category, author);
+    }
+
+    public String getIsbn() {
+        return this.isbn;
+    }
+
+    public String getTitle() {
+        return this.title;
     }
 }

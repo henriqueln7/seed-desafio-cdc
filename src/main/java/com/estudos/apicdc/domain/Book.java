@@ -12,8 +12,8 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Size(max = 500)
     @NotBlank
+    @Size(max = 500)
     private String resume;
     private String summaryMarkdown;
     private BigDecimal price;
