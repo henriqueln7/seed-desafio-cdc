@@ -39,4 +39,36 @@ public class Book {
         this.category = category;
         this.author = author;
     }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public String getSummaryMarkdown() {
+        return summaryMarkdown;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getNumberPages() {
+        return numberPages;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
 }

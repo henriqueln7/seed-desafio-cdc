@@ -37,4 +37,12 @@ public class Author {
         this.description = description;
         this.email = email;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
