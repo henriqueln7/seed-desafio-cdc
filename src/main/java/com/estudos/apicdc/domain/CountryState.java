@@ -1,5 +1,7 @@
 package com.estudos.apicdc.domain;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -22,5 +24,10 @@ public class CountryState {
     public CountryState(@NotBlank String name, @Valid @NotNull Country country) {
         this.name = name;
         this.country = country;
+    }
+
+    public boolean belongsTo(@NotNull @Valid Country country) {
+        Assert.notNull(country, "Country is null");
+        return this.country.equals(country);
     }
 }
