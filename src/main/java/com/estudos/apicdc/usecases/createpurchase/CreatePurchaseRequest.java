@@ -1,5 +1,10 @@
 package com.estudos.apicdc.usecases.createpurchase;
 
+import com.estudos.apicdc.domain.Country;
+import com.estudos.apicdc.domain.CountryState;
+import org.springframework.util.Assert;
+
+import javax.persistence.EntityManager;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,7 +27,6 @@ public class CreatePurchaseRequest {
     private final String city;
     @NotNull
     private final Long countryId;
-    // TODO Validação de estado ser obrigatório se o país tiver estados
     private final Long countryStateId;
     @NotBlank
     private final String phoneNumber;
@@ -68,18 +72,18 @@ public class CreatePurchaseRequest {
         return countryStateId;
     }
 
-//    public boolean hasCountryStateValid(EntityManager manager) {
-//
-//        if (this.countryStateId != null) {
-//            Country country = manager.find(Country.class, this.countryId);
-//            CountryState countryState = manager.find(CountryState.class, this.countryStateId);
-//            if (country == null || countryState == null) {
-//                return false;
-//            }
-//            return country.hasStates() && countryState.belongsTo(country);
-//        }
-//
-//        return true;
-//
-//    }
+    public boolean countryStateIsValid(EntityManager manager) {
+        Country country = manager.find(Country.class, this.countryId);
+        Assert.notNull(country, "Country is null");
+        if (country.hasStates()) {
+            if (this.countryStateId == null) {
+                return false;
+            }
+            CountryState state = manager.find(CountryState.class, this.countryStateId);
+            Assert.notNull(state, "CountryState is null");
+            return state.belongsTo(country);
+        }
+        return true;
+    }
+
 }
