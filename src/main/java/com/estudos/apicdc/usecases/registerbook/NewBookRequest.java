@@ -62,4 +62,32 @@ public class NewBookRequest {
     public String getTitle() {
         return this.title;
     }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public String getSummaryMarkdown() {
+        return summaryMarkdown;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getNumberPages() {
+        return numberPages;
+    }
+
+    public LocalDate getLaunchDate() {
+        return launchDate;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
 }

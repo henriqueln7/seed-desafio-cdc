@@ -2,23 +2,34 @@ package com.estudos.apicdc.domain;
 
 import org.springframework.util.Assert;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.function.Function;
 
+@Entity
 public class Purchase {
-    private final String email;
-    private final String name;
-    private final String surname;
-    private final String document;
-    private final String address;
-    private final String addressComplement;
-    private final String city;
-    private final Country country;
-    private final String phoneNumber;
-    private final String cep;
-    private final Order order;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String email;
+    private String name;
+    private String surname;
+    private String document;
+    private String address;
+    private String addressComplement;
+    private String city;
+    @ManyToOne
+    private Country country;
+    private String phoneNumber;
+    private String cep;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Order order;
+    @ManyToOne
     private CountryState state;
+
+    @Deprecated
+    protected Purchase(){}
 
     public Purchase(String email, String name, String surname, String document, String address, String addressComplement, String city, Country country, String phoneNumber, String cep, Function<Purchase, Order> createOrder) {
         this.email = email;

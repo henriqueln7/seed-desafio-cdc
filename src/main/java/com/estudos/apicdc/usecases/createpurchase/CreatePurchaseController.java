@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
@@ -23,8 +24,9 @@ public class CreatePurchaseController {
     }
 
     @PostMapping("/purchases")
-    public String createPurchase(@RequestBody @Valid CreatePurchaseRequest request) {
+    @Transactional
+    public void createPurchase(@RequestBody @Valid CreatePurchaseRequest request) {
         Purchase purchase = request.toModel(manager);
-        return purchase.toString();
+        manager.persist(purchase);
     }
 }
