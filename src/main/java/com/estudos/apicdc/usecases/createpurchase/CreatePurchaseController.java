@@ -1,5 +1,6 @@
 package com.estudos.apicdc.usecases.createpurchase;
 
+import com.estudos.apicdc.domain.Purchase;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,8 @@ public class CreatePurchaseController {
     }
 
     @PostMapping("/purchases")
-    public void createPurchase(@RequestBody @Valid CreatePurchaseRequest request) {
-        System.out.println(request);
+    public String createPurchase(@RequestBody @Valid CreatePurchaseRequest request) {
+        Purchase purchase = request.toModel(manager);
+        return purchase.toString();
     }
 }
