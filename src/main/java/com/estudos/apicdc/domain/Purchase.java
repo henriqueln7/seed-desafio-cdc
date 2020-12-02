@@ -70,4 +70,8 @@ public class Purchase {
                 ", state=" + state +
                 '}';
     }
+
+    public Long getId() {
+        return this.id;
+    }
 }
