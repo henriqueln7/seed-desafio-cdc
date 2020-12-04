@@ -15,7 +15,7 @@ public class Coupon {
     private Long id;
     private @NotBlank String code;
     private @Positive @Max(100) int discountPercentage;
-    private @NotNull @Future LocalDate expirationDate;
+    private @NotNull @FutureOrPresent LocalDate expirationDate;
 
     @Deprecated
     protected Coupon(){}
@@ -24,5 +24,9 @@ public class Coupon {
         this.code = code;
         this.discountPercentage = discountPercentage;
         this.expirationDate = expirationDate;
+    }
+
+    public boolean isValid() {
+        return this.expirationDate.compareTo(LocalDate.now()) >= 0;
     }
 }

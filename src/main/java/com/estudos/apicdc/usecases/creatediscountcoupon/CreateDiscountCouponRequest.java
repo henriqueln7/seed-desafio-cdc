@@ -12,7 +12,7 @@ public class CreateDiscountCouponRequest {
     @Max(100)
     public final int discountPercentage;
     @NotNull
-    @Future
+    @FutureOrPresent
     public final LocalDate expirationDate;
 
     public CreateDiscountCouponRequest(String code, int discountPercentage, LocalDate expirationDate) {
