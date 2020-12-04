@@ -27,6 +27,8 @@ public class Purchase {
     private Order order;
     @ManyToOne
     private CountryState state;
+    @ManyToOne
+    private Coupon coupon;
 
     @Deprecated
     protected Purchase(){}
@@ -71,7 +73,12 @@ public class Purchase {
                 '}';
     }
 
-    public Long getId() {
-        return this.id;
+    public void addCoupon(Coupon coupon) {
+        Assert.state(this.coupon == null, "This purchase already has a coupon. You cannot put another on it");
+        Assert.notNull(coupon, "You should not pass a null coupon");
+        Assert.state(coupon.isValid(), "Coupon is not valid. It is expired");
+        Assert.state(this.id == null, "This purchase is already persisted on database. You can't do this operation.");
+
+        this.coupon = coupon;
     }
 }

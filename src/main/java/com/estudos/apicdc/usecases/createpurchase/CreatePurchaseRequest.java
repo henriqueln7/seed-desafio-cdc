@@ -1,16 +1,15 @@
 package com.estudos.apicdc.usecases.createpurchase;
 
-import com.estudos.apicdc.domain.Country;
-import com.estudos.apicdc.domain.CountryState;
-import com.estudos.apicdc.domain.Order;
-import com.estudos.apicdc.domain.Purchase;
+import com.estudos.apicdc.domain.*;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class CreatePurchaseRequest {
@@ -39,8 +38,10 @@ public class CreatePurchaseRequest {
     @NotNull
     @Valid
     private OrderRequest order;
+    
+    private String couponCode;
 
-    public CreatePurchaseRequest(@NotBlank @Email String email, @NotBlank String name, @NotBlank String surname, String document, @NotBlank String address, @NotBlank String addressComplement, @NotBlank String city, @NotNull Long countryId, Long countryStateId, @NotBlank String phoneNumber, @NotBlank String cep, @NotNull @Valid OrderRequest order) {
+    public CreatePurchaseRequest(@NotBlank @Email String email, @NotBlank String name, @NotBlank String surname, String document, @NotBlank String address, @NotBlank String addressComplement, @NotBlank String city, @NotNull Long countryId, Long countryStateId, @NotBlank String phoneNumber, @NotBlank String cep, @NotNull @Valid OrderRequest order, String couponCode) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -53,6 +54,7 @@ public class CreatePurchaseRequest {
         this.phoneNumber = phoneNumber;
         this.cep = cep;
         this.order = order;
+        this.couponCode = couponCode;
     }
 
     @Override
@@ -103,7 +105,7 @@ public class CreatePurchaseRequest {
         return true;
     }
 
-    public Purchase toModel(EntityManager manager) {
+    public Purchase toModel(EntityManager manager, CouponRepository couponRepository) {
         Country country = manager.find(Country.class, this.countryId);
         Assert.notNull(country, "CountryId is not valid");
 
@@ -115,7 +117,21 @@ public class CreatePurchaseRequest {
             Assert.notNull(state, "CountryStateId is not valid");
             purchase.setState(state);
         }
+
+        if (this.hasCouponCode()) {
+            Optional<Coupon> optionalCoupon = couponRepository.findByCode(this.couponCode);
+            Assert.state(optionalCoupon.isPresent(), "Coupon not valid");
+            purchase.addCoupon(optionalCoupon.get());
+        }
+
         return purchase;
     }
 
+    public boolean hasCouponCode() {
+        return StringUtils.hasLength(this.couponCode);
+    }
+
+    public Optional<String> getCouponCode() {
+        return Optional.ofNullable(this.couponCode);
+    }
 }
