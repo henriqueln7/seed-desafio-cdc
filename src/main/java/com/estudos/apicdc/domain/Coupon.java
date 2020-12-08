@@ -42,6 +42,6 @@ public class Coupon {
         Assert.notNull(price, "You should not pass a null price");
         Assert.isTrue(price.compareTo(BigDecimal.ZERO) > 0, "You should pass a positive price");
 
-        return price.multiply(new BigDecimal("1").subtract(this.discountPercentage));
+        return price.multiply(BigDecimal.ONE.subtract(this.discountPercentage));
     }
 }
