@@ -9,8 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CreatePurchaseRequest {
     @NotBlank
@@ -37,9 +38,9 @@ public class CreatePurchaseRequest {
     private final String cep;
     @NotNull
     @Valid
-    private OrderRequest order;
+    private final OrderRequest order;
     
-    private String couponCode;
+    private final String couponCode;
 
     public CreatePurchaseRequest(@NotBlank @Email String email, @NotBlank String name, @NotBlank String surname, String document, @NotBlank String address, @NotBlank String addressComplement, @NotBlank String city, @NotNull Long countryId, Long countryStateId, @NotBlank String phoneNumber, @NotBlank String cep, @NotNull @Valid OrderRequest order, String couponCode) {
         this.email = email;
@@ -55,32 +56,6 @@ public class CreatePurchaseRequest {
         this.cep = cep;
         this.order = order;
         this.couponCode = couponCode;
-    }
-
-    @Override
-    public String toString() {
-        return "CreatePurchaseRequest{" +
-                "email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", document='" + document + '\'' +
-                ", address='" + address + '\'' +
-                ", addressComplement='" + addressComplement + '\'' +
-                ", city='" + city + '\'' +
-                ", countryId=" + countryId +
-                ", countryStateId=" + countryStateId +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", CEP='" + cep + '\'' +
-                ", cart=" + order +
-                '}';
-    }
-
-    public Long getCountryId() {
-        return countryId;
-    }
-
-    public Long getCountryStateId() {
-        return countryStateId;
     }
 
     /**
@@ -109,8 +84,11 @@ public class CreatePurchaseRequest {
         Country country = manager.find(Country.class, this.countryId);
         Assert.notNull(country, "CountryId is not valid");
 
-        Function<Purchase, Order> createOrder = this.order.toModel(manager);
-        Purchase purchase = new Purchase(this.email, this.name, this.surname, this.document, this.address, this.addressComplement, this.city, country, this.phoneNumber, this.cep, createOrder);
+        List<OrderItem> orderItems = this.order.items.stream()
+                                                     .map(item -> item.toModel(manager))
+                                                     .collect(Collectors.toList());
+
+        Purchase purchase = new Purchase(this.email, this.name, this.surname, this.document, this.address, this.addressComplement, this.city, country, this.phoneNumber, this.cep, orderItems, this.order.total);
 
         if (this.countryStateId != null) {
             CountryState state = manager.find(CountryState.class, this.countryStateId);

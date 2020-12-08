@@ -35,4 +35,8 @@ public class OrderItem {
                 ", quantity=" + quantity +
                 '}';
     }
+
+    public Book getBook() {
+        return book;
+    }
 }
