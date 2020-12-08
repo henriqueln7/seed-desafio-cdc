@@ -39,4 +39,8 @@ public class OrderItem {
     public Book getBook() {
         return book;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }

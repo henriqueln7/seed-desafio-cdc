@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Entity
 public class Purchase {
@@ -64,6 +63,12 @@ public class Purchase {
         this.totalPrice = totalPrice;
     }
 
+    public BigDecimal calculateFinalPrice() {
+        if (this.coupon == null) {
+            return this.totalPrice;
+        }
+        return this.coupon.giveDiscount(this.totalPrice);
+    }
 
     public void setState(@Valid @NotNull CountryState state) {
         Assert.notNull(state, "CountryState is null");
@@ -91,5 +96,53 @@ public class Purchase {
 
     public String getName() {
         return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getAddressComplement() {
+        return addressComplement;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public Optional<CountryState> getState() {
+        return Optional.ofNullable(this.state);
+    }
+
+    public Optional<Coupon> getCoupon() {
+        return Optional.ofNullable(this.coupon);
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public List<OrderItem> getItems() {
+        return items;
     }
 }

@@ -30,4 +30,8 @@ public class CountryState {
         Assert.notNull(country, "Country is null");
         return this.country.equals(country);
     }
+
+    public String getName() {
+        return name;
+    }
 }
